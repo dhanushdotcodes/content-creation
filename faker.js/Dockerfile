@@ -14,8 +14,8 @@ COPY . /app
 RUN bunx prisma generate
 
 EXPOSE 3000
-# Ensure migrations are applied and the app starts
-CMD ["sh", "-c", "bunx prisma db push && bun run dev"]
+# Ensure migrations are applied, seeding runs, and the app starts
+CMD ["sh", "-c", "bunx prisma db push && bunx prisma db seed && bun run dev"]
 
 # --- Production Builder ---
 FROM base AS builder
