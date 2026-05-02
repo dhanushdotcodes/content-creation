@@ -2,6 +2,7 @@
 
 ## 2026-05-02
 
+- `feat`: implement job applications API with dedicated validation
 - `feat`: containerise the faker.js application
 - `docs(api)`: update agent rules and workflows for express
 - `feat(api)`: create health route stack using express

@@ -35,6 +35,7 @@ src/
   routes/        -> Route definitions only
   helpers/       -> Helper functions for services handlers
   services/      -> Business logic only
+  validation/    -> Zod input validation schemas
   @types/        -> Centralized TypeScript types
 
 prisma/
@@ -119,9 +120,11 @@ Never bypass layers.
 
 ## 11. Git & Workflow
 
-All commits MUST follow Conventional Commits format:
+- All commits MUST follow Conventional Commits format:
+  
+  `<type>(<scope>): <short description>`
 
-<type>(<scope>): <short description>
+- Always update `faker.js/CHANGELOG.md` immediately after you commit to track changes.
 
 ---
 

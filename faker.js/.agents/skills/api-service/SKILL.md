@@ -18,6 +18,7 @@ This skill is responsible for creating API endpoints for the application. It con
 2. **Create a Detailed Plan**: Create a detailed plan that consists of file names, service logics, folders/files to update, and files to create.
 3. **Reference Database Schema**: Refer to the DB schema and get to know about the fields, create type interfaces based on what is needed, and follow the response and request body pattern in the `API_SPEC.md` as well.
 4. **Follow Rules & Workflows**: Continue as per the rules and workflows and don't break them. If confused, refer to another API route that already exists.
+5. **Extract Zod Validations**: Put Zod validation schemas in a separate file within the `src/validation/` folder and import them into the controllers for request validation.
 
 ## Examples
 ### Workflow-Compliant API Stack Example (`order` entity)
