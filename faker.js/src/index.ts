@@ -1,6 +1,7 @@
 import express from "express";
 import { config } from "./lib/config";
 import healthRoutes from "./routes/health-routes";
+import applicationsRoutes from "./routes/applications-routes";
 
 const app = express();
 const port = config.port;
@@ -9,6 +10,7 @@ app.use(express.json());
 
 // Routes
 app.use("/", healthRoutes);
+app.use("/api/v1/applications", applicationsRoutes);
 
 // Fallback Not Found
 app.use((req, res) => {

@@ -30,3 +30,7 @@ GET /applications/:id — get one application by ID.
 PATCH /applications/:id — update part of an application, like status or notes.
 
 DELETE /applications/:id — delete an application
+
+## Health Check
+---
+GET /health — check the status of the API and its database connection.
