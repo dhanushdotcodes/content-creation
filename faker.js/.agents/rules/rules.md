@@ -136,9 +136,6 @@ All commits MUST follow Conventional Commits format:
 
 Scope must reflect the layer or module:
 
-- auth
-- users
-- orders
 - prisma
 - api
 - controllers
