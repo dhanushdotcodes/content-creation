@@ -20,7 +20,7 @@ This skill handles database creation, schema definition, and migrations using Pr
     - Define models exactly matching the required database schema.
 3. **Handle Migrations Correctly**:
     - Do NOT delete or modify existing migration history files (`prisma/migrations/**`).
-    - Use commands like `bunx prisma migrate dev --name <migration_name>` for local changes.
+    - Use commands like `bunx --bun prisma migrate dev --name <migration_name>` for local changes.
     - Always commit new migration files to version control.
 4. **Preserve Existing Data**:
     - Ensure that any schema modification (such as adding a required field) does not delete or purge existing records in the database.
@@ -65,5 +65,17 @@ model JobApplication {
 
 - Below is the migration command to generate a new migration safely:
 ```bash
-bunx prisma migrate dev --name init_job_applications
+bunx --bun prisma migrate dev --name init_job_applications
 ```
+
+## Important Commands
+
+| Task | Command |
+| :--- | :--- |
+| Initialize Prisma | `bunx --bun prisma init` |
+| Generate Client | `bunx --bun prisma generate` |
+| Push Schema (Prototyping) | `bunx --bun prisma db push` |
+| Create/Run Migrations | `bunx --bun prisma migrate dev` |
+| Deploy Migrations (Prod) | `bunx --bun prisma migrate deploy` |
+| Seed Database | `bunx --bun prisma db seed` |
+
