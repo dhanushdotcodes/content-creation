@@ -193,3 +193,11 @@ misc fixes
 - Unit tests: Use mocks (no DB)
 - Integration tests: Use real DB + API
 - Do not mix both approaches
+
+---
+
+## 14. Makefile & Commands
+
+- Create a `Makefile` in the root directory to manage and execute all project commands.
+- Use Makefile commands for all terminal operations.
+- Always add any new command (i.e., any command not already present in the `Makefile`) to the `Makefile` before execution.
