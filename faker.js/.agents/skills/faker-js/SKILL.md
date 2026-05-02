@@ -61,17 +61,20 @@ export function createFakeJobApplication() {
 
 ### Script Execution on Docker Startup
 
-A wrapper or script that loops until the database is up and then runs the seeding command:
+Configure the development service in `docker-compose.yml` to wait for the database healthcheck and run the seed script:
 
-```bash
-#!/bin/bash
-# wait-for-db-and-seed.sh
-echo "Waiting for database to be ready..."
-until bunx prisma db push; do
-  echo "Database is not ready yet. Sleeping..."
-  sleep 2
-done
+```yaml
+services:
+  postgres:
+    image: postgres:alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d faker_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-echo "Database is ready! Running seed..."
-bun run src/lib/faker.js/seed.ts
+  app:
+    depends_on:
+      - postgres
+    command: ["sh", "-c", "bunx prisma db push && bun run db:seed && bun run dev"]
 ```
