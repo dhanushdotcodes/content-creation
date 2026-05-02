@@ -31,6 +31,7 @@ You are an expert developer assistant specializing in Bun.js, TypeScript, and Pr
 src/
   controllers/   -> Handles request/response only
   routes/        -> Route definitions only
+  helpers/       -> Helper functions for services handlers
   services/      -> Business logic only
   @types/        -> Centralized TypeScript types
 
@@ -85,10 +86,11 @@ Never bypass layers.
 
 ## 8. Naming Conventions
 
-- Files: Follow existing pattern strictly
+- Files: Use kebab-case with a clear layer suffix (e.g., `user-controller.ts`, `post-service.ts`, `auth-routes.ts`, `data-helper.ts`).
 - Types/Interfaces: PascalCase
 - Functions/Variables: camelCase
 - DB fields: snake_case (via Prisma schema)
+
 
 ---
 
@@ -201,3 +203,11 @@ misc fixes
 - Create a `Makefile` in the root directory to manage and execute all project commands.
 - Use Makefile commands for all terminal operations.
 - Always add any new command (i.e., any command not already present in the `Makefile`) to the `Makefile` before execution.
+
+---
+
+## 15. Architectural Rules
+- **Separation of Concerns**: Never put database logic in Routes. Routes call Services.
+- **Helper Isolation**: Services should not contain generic logic (e.g., date formatting, string parsing). Move these to `src/helpers/`.
+- **Database Access**: Use the singleton Prisma client located at `src/lib/prisma.ts`.
+- **Type Safety**: Prefer explicit types for function returns. Use `Prisma.ResourceCreateInput` for service arguments.
