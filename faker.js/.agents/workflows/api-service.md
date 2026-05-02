@@ -19,10 +19,10 @@ description: Create a full API stack with separate types, helpers, services, con
    - **Helper**: Create `src/helpers/[entity]-helper.ts`.
      - Add pure, generic functions for formatting, parsing, or any service-specific helpers.
    - **Controller**: Create `src/controllers/[entity]-controller.ts`.
-     - Parse requests and handle input validation.
+     - Parse Express request and handle input validation.
      - Call services to complete the task.
      - Do not interact with Prisma directly.
-     - Handle errors and format all API responses using the standard structure:
+     - Handle errors and format all API responses using Express `Response` in the standard structure:
        ```typescript
        {
          success: boolean,
@@ -31,7 +31,7 @@ description: Create a full API stack with separate types, helpers, services, con
        }
        ```
    - **Route**: Create `src/routes/[entity]-routes.ts`.
-     - Only define endpoints and map to controller handlers.
+     - Use Express `Router` to only define endpoints and map to controller handlers.
      - No business logic or database access.
 
 4. **Database Sync**

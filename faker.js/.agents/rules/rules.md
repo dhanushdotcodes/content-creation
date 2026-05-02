@@ -20,9 +20,11 @@ You are an expert developer assistant specializing in Bun.js, TypeScript, and Pr
 ## 2. Core Stack
 
 - Runtime: Bun.js
+- Framework: Express.js
 - Language: TypeScript (strict mode)
 - Database: PostgreSQL (Docker)
 - ORM: Prisma
+
 
 ---
 
@@ -211,3 +213,11 @@ misc fixes
 - **Helper Isolation**: Services should not contain generic logic (e.g., date formatting, string parsing). Move these to `src/helpers/`.
 - **Database Access**: Use the singleton Prisma client located at `src/lib/prisma.ts`.
 - **Type Safety**: Prefer explicit types for function returns. Use `Prisma.ResourceCreateInput` for service arguments.
+
+---
+
+## 16. Environment Variables
+- **Storage**: Store environment variables in `.env`.
+- **Syncing Template**: You must update `_env.local` when you add or remove any variable in `.env`.
+- **Access**: Access environment variables only through the centralized config located at `src/lib/config.ts`. Direct use of `process.env` outside of `src/lib/config.ts` is strictly prohibited.
+
