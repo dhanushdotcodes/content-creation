@@ -1,13 +1,23 @@
 {
-  "name": ".",
-  "module": "index.ts",
+  "name": "faker.js",
+  "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist",
+    "lint": "echo 'No linter configured'",
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
-    "@prisma/client": "5",
+    "@prisma/client": "^7.8.0",
     "@types/bun": "latest",
-    "prisma": "5"
+    "prisma": "^7.8.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "zod": "^4.4.2"
   }
 }
