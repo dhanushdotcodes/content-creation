@@ -14,15 +14,16 @@ This skill handles database creation, schema definition, and migrations using Pr
 
 ## Steps
 1. **Understand the Database Information**: Review `docs/DB_SCHEMA.md` to ensure any new or modified tables exactly match the documented columns, data types (e.g., String, Int, UUID), enums, defaults, and relationships.
-2. **Configure Prisma and Schema**: 
+2. **Synchronize Schema Changes**: Whenever there are changes to the database schema, update `docs/DB_SCHEMA.md` to align with the new schema, and record the schema change in `CHANGELOG.md`.
+3. **Configure Prisma and Schema**: 
     - Set up the Prisma `datasource` and `generator` blocks properly.
     - Define Prisma enums (e.g., `enum JobStatus { APPLIED; INTERVIEWING; OFFERED; REJECTED }`) and map them accurately if working with existing databases.
     - Define models exactly matching the required database schema.
-3. **Handle Migrations Correctly**:
+4. **Handle Migrations Correctly**:
     - Do NOT delete or modify existing migration history files (`prisma/migrations/**`).
     - Use commands like `bunx --bun prisma migrate dev --name <migration_name>` for local changes.
     - Always commit new migration files to version control.
-4. **Preserve Existing Data**:
+5. **Preserve Existing Data**:
     - Ensure that any schema modification (such as adding a required field) does not delete or purge existing records in the database.
     - Do NOT drop tables or clear data unless explicitly requested by the user.
 
