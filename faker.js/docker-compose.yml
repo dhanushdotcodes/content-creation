@@ -28,6 +28,7 @@ services:
       - PORT=3000
     depends_on:
       - postgres
+    command: ["sh", "-c", "bunx prisma db push && bun run db:seed && bun run dev"]
 
 volumes:
   postgres_data:
