@@ -2,12 +2,197 @@
 trigger: always_on
 ---
 
----
-name: Database Expert
-description: Use this when the user asks about SQL, migrations, or database schema changes.
----
 # Rules
-- Always use indexed columns for foreign keys.
-- Never write raw SQL; use the Prisma ORM patterns.
-- Check for N+1 query issues before suggesting code.
 
+You are an expert developer assistant specializing in Bun.js, TypeScript, and Prisma.
+
+---
+
+## 1. General Principles
+
+- Do not go out of the scope of the problem asked.
+- Do not fix, refactor, or improve existing code conventions unless explicitly asked.
+- Always follow existing patterns in the codebase.
+- Comments must explain "Why", not "What".
+
+---
+
+## 2. Core Stack
+
+- Runtime: Bun.js
+- Language: TypeScript (strict mode)
+- Database: PostgreSQL (Docker)
+- ORM: Prisma
+
+---
+
+## 3. Project Structure
+
+src/
+  controllers/   -> Handles request/response only
+  routes/        -> Route definitions only
+  services/      -> Business logic only
+  @types/        -> Centralized TypeScript types
+
+prisma/
+  schema.prisma
+
+---
+
+## 4. Layer Responsibilities (STRICT)
+
+- Routes:
+  - Only define endpoints
+  - No business logic
+
+- Controllers:
+  - Parse request
+  - Call services
+  - Return response
+  - No database access
+
+- Services:
+  - Contain all business logic
+  - Only layer allowed to interact with Prisma
+  - Must not depend on HTTP layer
+
+---
+
+## 5. Data Flow (MANDATORY)
+
+Route → Controller → Service → Prisma
+
+Never bypass layers.
+
+---
+
+## 6. Prisma Usage
+
+- Prisma must ONLY be used inside services
+- Never use Prisma in controllers or routes
+- Always use generated Prisma types
+
+---
+
+## 7. TypeScript Rules
+
+- `any` is strictly forbidden
+- Use `unknown` or explicit interfaces
+- All types must be in `src/@types/`
+- Do not define types inside business logic files
+
+---
+
+## 8. Naming Conventions
+
+- Files: Follow existing pattern strictly
+- Types/Interfaces: PascalCase
+- Functions/Variables: camelCase
+- DB fields: snake_case (via Prisma schema)
+
+---
+
+## 9. Error Handling
+
+- Services throw errors
+- Controllers handle and format responses
+- All API responses must follow:
+
+{
+  success: boolean,
+  data?: unknown,
+  error?: string
+}
+
+---
+
+## 10. Validation
+
+- Input validation must happen at controller level
+- Services assume validated data
+
+---
+
+## 11. Git & Workflow
+
+All commits MUST follow Conventional Commits format:
+
+<type>(<scope>): <short description>
+
+---
+
+### 1. Types
+
+- feat     → New feature
+- fix      → Bug fix
+- refactor → Code change without behavior change
+- test     → Adding or updating tests
+- docs     → Documentation changes
+- chore    → Maintenance (configs, deps)
+
+---
+
+### 2. Scope (MANDATORY)
+
+Scope must reflect the layer or module:
+
+- auth
+- users
+- orders
+- prisma
+- api
+- controllers
+- services
+
+Examples:
+- feat(auth): add login endpoint
+- fix(users): handle null email edge case
+- refactor(services): extract payment logic
+
+---
+
+### 3. Description Rules
+
+- Max 72 characters
+- Use present tense
+- No vague words like "stuff", "changes", "update"
+
+---
+
+### 4. Good Examples
+
+feat(users): add user registration service  
+fix(auth): handle invalid JWT token error  
+refactor(orders): move pricing logic to service  
+test(users): add unit tests for user service  
+
+---
+
+### 5. Bad Examples (DO NOT DO)
+
+fix: bug  
+feat: changes  
+update code  
+misc fixes  
+
+---
+
+### 6. Commit Size
+
+- Keep commits small and focused (<50 LOC preferred)
+- One logical change per commit
+
+
+---
+
+## 12. Prisma Workflow
+
+- Run `bunx prisma generate` after schema changes
+
+---
+
+## 13. Testing Philosophy
+
+- Unit tests: Use mocks (no DB)
+- Integration tests: Use real DB + API
+- Do not mix both approaches
