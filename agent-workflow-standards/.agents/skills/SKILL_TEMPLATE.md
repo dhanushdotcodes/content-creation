@@ -1,24 +1,3 @@
-# Agent Skills Registry
-
-This document tracks all active `SKILL.md` files used for AI agent automation.
-
-## Summary
-
-- **Total Skills**: [Number]
-- **Last Updated**: [YYYY-MM-DD]
-
-## Active Skills
-
-| Skill Name | Description | Folder Path | Trigger Phrases | Status | Owner |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| `example-skill` | Brief description of what the skill does. | `.agents/skills/example-skill` | "trigger phrase 1", "trigger phrase 2" | Active/Draft | @user |
-
-## Skill Audit Log
-- **[YYYY-MM-DD]** Description of the change.
-
----
-## Template for New Skill
-```md
 ----
 name: skill-name
 description: Brief description of what the skill does in one sentence.
@@ -75,4 +54,3 @@ Do NOT use when:
 - [ ] No hardcoded configuration has been introduced
 - [ ] Tests or validation steps have been executed
 - [ ] Code follows project standards and rules
-```
