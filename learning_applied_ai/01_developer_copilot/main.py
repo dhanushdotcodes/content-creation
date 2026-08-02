@@ -1,56 +1,52 @@
 from openai import OpenAI
-
 from dotenv import load_dotenv
+from time import sleep
+from pydantic import BaseModel
 
 load_dotenv()
 
+class CalendarEvent(BaseModel):
+    date: str
+    place: str
+    description: str
+    
 client = OpenAI()
 
 history = [
-        {
-            "role": "system",
-            "content": "You are a helpful assistant, who tells a random funny knock knock jokes to the user"
-        },
-        {
-            "role": "assistant",
-            "content": "knock knock"
-        },
-        {
-            "role": "user",
-            "content": "who's there?"
-        }
-    ]
-
-gpt_mini = client.responses.create(
-    model="gpt-4o-mini",
-    input=history
-)
-
-print(gpt_mini.output_text)
-
-history.append({
-    "role": "assistant",
-    "content": gpt_mini.output_text
-})
+    {
+        "role": "system",
+        "content": "You are a helpful assistant, Who is going answer my questions related to calendar event. And return the response in json format with the keys date, place and description. Please don't answer questions other than the questions related to calendar events."
+    }
+]
 
 while True:
     user_input = input("User: ")
-    
-    if user_input.lower() == "exit" or user_input.lower() == "quit":
+
+    if user_input.lower() in {"exit", "quit"}:
         break
-    
+
     history.append({
         "role": "user",
         "content": user_input
     })
 
-    gpt_mini = client.responses.create(
+    with client.responses.stream(
         model="gpt-4o-mini",
-        input=history
-    )
+        input=history,
+        text_format=CalendarEvent,
+    ) as stream:
+        for event in stream:
+            if event.type == "response.refusal.delta":
+                print(event.delta, end="", flush=True)
+            elif event.type == "response.output_text.delta":
+                print(event.delta, end="", flush=True)
+            elif event.type == "response.error":
+                print(event.error, end="")
 
-    print(gpt_mini.output_text)
+        print()
+
+    final_response = stream.get_final_response()
     history.append({
         "role": "assistant",
-        "content": gpt_mini.output_text
+        "content": final_response.output_text
     })
