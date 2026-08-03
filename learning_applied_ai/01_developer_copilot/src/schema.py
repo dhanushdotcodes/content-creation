@@ -1,11 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
 
-class CalendarEvent(BaseModel):
-    date: str
-    place: str
-    description: str
-
 class JokeResponse(BaseModel):
     type: str
     setup: str
@@ -56,11 +51,8 @@ class GeoCodingResponse(BaseModel):
     results: Optional[list[GeoCodingResult]] = None
     generationtime_ms: float
 
-
 class CurrencyRateResponse(BaseModel):
     date: str
     base: str
     quote: str
     rate: float
-
-
