@@ -1,14 +1,8 @@
 from openai import OpenAI
 from dotenv import load_dotenv
-from time import sleep
-from pydantic import BaseModel
+from schema import CalendarEvent
 
 load_dotenv()
-
-class CalendarEvent(BaseModel):
-    date: str
-    place: str
-    description: str
     
 client = OpenAI()
 
