@@ -69,7 +69,6 @@ while True:
                     result = {"error": f"Unknown function: {fn_name}"}
 
                 # Feed the tool result back to the model
-                history.append(item)
                 history.append({
                     "type": "function_call_output",
                     "call_id": item.call_id,
