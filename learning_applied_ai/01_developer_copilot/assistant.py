@@ -1,40 +1,58 @@
-from .conversation import Conversation
+import json
+
 from openai import OpenAI
-from .tools import code_review, explain_code, improve_code
+from dotenv import load_dotenv
+
+from conversation import Conversation
+from tools import tool_definitions, available_functions
+from prompts.system_prompts import DEVELOPER_COPILOT_PROMPT
+
+load_dotenv()
 
 class Assistant:
     def __init__(self):
-        self.conversation = Conversation()
         self.client = OpenAI()
-        self.tools = {
-            "code_review": code_review,
-            "explain_code": explain_code,
-            "improve_code": improve_code,
-        }
+        self.conversation = Conversation(system_prompt=DEVELOPER_COPILOT_PROMPT)
 
-    def chat(self, user_input):
+    def chat(self, user_input: str) -> str:
         self.conversation.add_user_message(user_input)
 
-        # Call OpenAI
-        response = self.client.responses.create(...)
+        response = self._call_llm()
 
-        # If tool call
-        if tool_requested:
-            tool_result = self.execute_tool(...)
-            self.conversation.add_tool_message(...)
+        # Tool-call loop — keep going until the model gives a plain text response
+        while response.output:
+            has_tool_call = False
 
-            # Call OpenAI again
-            response = self.client.responses.create(...)
+            for item in response.output:
+                if item.type == "function_call":
+                    has_tool_call = True
+                    self.conversation.add_function_call(item)
+                    result = self._execute_tool(item.name, item.arguments)
+                    self.conversation.add_tool_result(
+                        call_id=item.call_id,
+                        output=json.dumps(result),
+                    )
 
-        self.conversation.add_assistant_message(...)
+            if not has_tool_call:
+                break
 
-        return response
+            response = self._call_llm()
+
+        assistant_reply = response.output_text or ""
+        self.conversation.add_assistant_message(assistant_reply)
+        return assistant_reply
 
     def _call_llm(self):
-        pass
+        return self.client.responses.create(
+            model="gpt-4o-mini",
+            input=self.conversation.get_history(),
+            tools=tool_definitions,
+        )
 
-    def __execute_tool(self, tool_name, arguments):
-        pass
+    def _execute_tool(self, tool_name: str, arguments: str) -> str:
+        fn = available_functions.get(tool_name)
+        if fn is None:
+            return json.dumps({"error": f"Unknown tool: {tool_name}"})
 
-    def _handle_tool_call(self, response):
-        pass
+        fn_args = json.loads(arguments)
+        return fn(**fn_args)
