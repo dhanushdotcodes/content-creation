@@ -9,7 +9,18 @@ class Conversation:
 
     def add_function_call(self, item):
         """Store the raw function_call item the model emitted."""
-        self.history.append(item)
+        # Normalize the function_call item into a plain dict so the
+        # conversation history contains only serializable structures.
+        name = getattr(item, "name", None) or (item.get("name") if isinstance(item, dict) else None)
+        arguments = getattr(item, "arguments", None) or (item.get("arguments") if isinstance(item, dict) else None)
+        call_id = getattr(item, "call_id", None) or (item.get("call_id") if isinstance(item, dict) else None)
+
+        self.history.append({
+            "type": "function_call",
+            "name": name,
+            "arguments": arguments,
+            "call_id": call_id,
+        })
 
     def add_tool_result(self, call_id: str, output: str):
         self.history.append({
