@@ -56,36 +56,6 @@ def print_copilot_block(text: str):
 # ── main loop ─────────────────────────────────────────────────────────────────
 
 assistant = Assistant()
-
-def _chat_with_ui(user_input: str) -> str:
-    import json
-
-    assistant.conversation.add_user_message(user_input)
-    response = assistant._call_llm()
-
-    while response.output:
-        has_tool_call = False
-        for item in response.output:
-            if item.type == "function_call":
-                has_tool_call = True
-                # The API requires the function_call item itself in history
-                # before its matching function_call_output
-                assistant.conversation.add_function_call(item)
-                print_tool_call(item.name)
-                result = assistant._execute_tool(item.name, item.arguments)
-                assistant.conversation.add_tool_result(
-                    call_id=item.call_id,
-                    output=json.dumps(result),
-                )
-        if not has_tool_call:
-            break
-        response = assistant._call_llm()
-
-    reply = response.output_text or ""
-    assistant.conversation.add_assistant_message(reply)
-    return reply
-
-
 print_banner()
 
 while True:
@@ -104,6 +74,6 @@ while True:
 
     print_user_block(user_input)
 
-    reply = _chat_with_ui(user_input)
+    reply = assistant.chat(user_input)
 
     print_copilot_block(reply)

@@ -10,3 +10,5 @@ Add guardrails
 stream messages
 
 tbh it's a learning step so not required right now
+
+also ugly print statements
